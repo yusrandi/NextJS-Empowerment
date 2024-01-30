@@ -20,6 +20,7 @@
     }
   },
   "rules": {
+    "indent": "off",
     "import/prefer-default-export": 0,
     // https://stackoverflow.com/questions/69928061/struggling-with-typescript-react-eslint-and-simple-arrow-functions-components
     "react/function-component-definition": [
@@ -69,5 +70,6 @@
       2,
       "never"
     ]
+    
   }
 }

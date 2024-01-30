@@ -37,7 +37,7 @@ export default function Login() {
     setSubmitting(true)
 
     try {
-      if (username === "use" && password === "123") {
+      if (username === "admin" && password === "123") {
         const res = await axios.post('api/mock/login')
         if (res.status === 200) {
           router.push(getRedirect())

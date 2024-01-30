@@ -38,6 +38,14 @@ export default function ReportList(props: Props) {
         console.log({ status });
         console.log({ report });
         setReport(report)
+        let pesan = ""
+        if (status === "Diproses") {
+            pesan = "Laporan anda sedang Diproses"
+        } else if (status === "Ditolak") {
+            pesan = "Maaf, laporan anda ditolak"
+        } else if (status === "Diterima") {
+            pesan = "Selamat, laporan anda diterima, harap mengecek tanggal pertemuan"
+        }
 
 
         update(ref(database, "reports/" + report.id), {
@@ -45,7 +53,7 @@ export default function ReportList(props: Props) {
         })
             .then(() => {
                 console.log("Updated")
-                getUser(report.user_id)
+                getUser(report.user_id, pesan)
             })
             .catch((error) => console.log(error))
 
@@ -55,14 +63,14 @@ export default function ReportList(props: Props) {
         }
     }
 
-    async function getUser(userId: string) {
+    async function getUser(userId: string, pesan: string) {
         console.log({ userId });
         const dbRef = ref(database);
         get(child(dbRef, `users/${userId}`)).then((snapshot) => {
             if (snapshot.exists()) {
                 const dataUser = snapshot.val() as UserType
                 console.log({ dataUser })
-                // sendMessage(dataUser.token)
+                sendMessage(dataUser.token, pesan)
             } else {
                 console.log("No data available");
             }
@@ -71,7 +79,7 @@ export default function ReportList(props: Props) {
         });
 
     }
-    async function sendMessage(token: string) {
+    async function sendMessage(token: string, pesan: string) {
 
         console.log({ token });
         const apiUrl = 'https://fcm.googleapis.com/fcm/send';
@@ -80,7 +88,7 @@ export default function ReportList(props: Props) {
         const requestData = {
             "to": token,
             "notification": {
-                "body": `Selamat laporan anda telah Diterima, silahkan cek jadwal anda`,
+                "body": pesan,
                 "OrganizationId": "2",
                 "content_available": true,
                 "priority": "high",
